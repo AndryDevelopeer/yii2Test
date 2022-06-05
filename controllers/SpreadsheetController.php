@@ -30,9 +30,12 @@
                 $headers = ['id', 'group_id', 'name', 'marking', 'rating'];
                 $spreadsheet = new Spreadsheet();
                 $sheet = $spreadsheet->getActiveSheet();
+                $arRes = [];
 
                 foreach (range('A', 'Z') as $columnID) {
-                    $sheet->getColumnDimension($columnID)->setAutoSize(true);
+                    $sheet
+                        ->getColumnDimension($columnID)
+                        ->setAutoSize(true);
                 }
                 foreach ($headers as $key => $value) {
                     $sheet->setCellValue(self::LETTERS[$key] . '1', $value);
@@ -60,6 +63,7 @@
                             'rating'   => $data->rating,
                         ];
                     }
+                    $arRes2 = self::customMultiSort($arRes, 'name');
                     $borderStyleArray = [
                         'font'    => [
                             'name'  => 'Roboto',
@@ -69,11 +73,17 @@
                         ],
                         'borders' => self::BORDERS,
                     ];
-                    $sheet->getStyle('A2:' . self::LETTERS[count($headers) - 1] . (count($arRes) + 1))
+                    $coordinate = 'A2:' . self::LETTERS[count($headers) - 1] . (count($arRes) + count($arRes2) + 2);
+                    $sheet
+                        ->getStyle($coordinate)
                         ->applyFromArray($borderStyleArray);
 
-                    $spreadsheet->getActiveSheet()
+                    $spreadsheet
+                        ->getActiveSheet()
                         ->fromArray($arRes, NULL, 'A2');
+                    $spreadsheet
+                        ->getActiveSheet()
+                        ->fromArray($arRes2, NULL, 'A' . (count($arRes) + 3));
                 }
 
                 $writer = new Xlsx($spreadsheet);
@@ -83,5 +93,16 @@
             } catch (ErrorException $e) {
                 return $e->getMessage();
             }
+        }
+
+        private function customMultiSort(array $array, string $field): array
+        {
+            $sortArr = [];
+            foreach ($array as $key => $val) {
+                $sortArr[$key] = $val[$field];
+            }
+            array_multisort($sortArr, $array);
+
+            return $array;
         }
     }

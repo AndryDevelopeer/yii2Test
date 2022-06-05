@@ -12,6 +12,32 @@
          */
         public function safeUp()
         {
+            $sections = [
+                ['parent_id' => 0, 'name' => 'Для ванны'],
+                ['parent_id' => 0, 'name' => 'Ногти'],
+                ['parent_id' => 2, 'name' => 'Лаки'],
+                ['parent_id' => 2, 'name' => 'Лампы для сушки'],
+                ['parent_id' => 0, 'name' => 'Кожа'],
+                ['parent_id' => 5, 'name' => 'Для рук'],
+                ['parent_id' => 5, 'name' => 'Для лица'],
+                ['parent_id' => 0, 'name' => 'Парфюмерия'],
+            ];
+
+            $products = [
+                ['group_id' => 3, 'name' => 'Лак черный', 'marking' => 'ЛЧ1', 'rating' => 1.5],
+                ['group_id' => 4, 'name' => 'Лампа для сушки 300Вт', 'marking' => 'ЛС1', 'rating' => 2.5],
+                ['group_id' => 6, 'name' => 'Крем для рук', 'marking' => 'КР1', 'rating' => 5],
+                ['group_id' => 7, 'name' => 'Крем для лица ночной', 'marking' => 'КЛ1', 'rating' => 3.5],
+                ['group_id' => 3, 'name' => 'Лак красный', 'marking' => 'ЛК2', 'rating' => 4.5],
+                ['group_id' => 3, 'name' => 'Абразивный круг', 'marking' => 'АВ2', 'rating' => 5],
+                ['group_id' => 3, 'name' => 'Лак синий', 'marking' => 'ЛС2', 'rating' => 5],
+                ['group_id' => 3, 'name' => 'Лак прозрачный', 'marking' => 'ЛП2', 'rating' => 2.6],
+                ['group_id' => 3, 'name' => 'Лак почти черный черный #000011', 'marking' => 'ЛПЧ2', 'rating' => 3.7],
+                ['group_id' => 4, 'name' => 'Лампа 400кВт', 'marking' => 'ЛС3', 'rating' => 4.7],
+                ['group_id' => 6, 'name' => 'Крем для ладоней', 'marking' => 'КЛ2', 'rating' => 3.8],
+                ['group_id' => 6, 'name' => 'Крем для пальцев', 'marking' => 'КП2', 'rating' => 4.9],
+            ];
+
             $this->createTable('{{%sections}}', [
                 'id'        => $this->primaryKey(),
                 'parent_id' => $this->integer()->defaultValue(0),
@@ -23,6 +49,10 @@
                 'sections',
                 'parent_id'
             );
+
+            foreach ($sections as $section) {
+                $this->insert('{{%sections}}', $section);
+            }
 
             $this->createTable('{{%products}}', [
                 'id'       => $this->primaryKey(),
@@ -52,6 +82,9 @@
                 'products',
                 ['group_id', 'name']
             );
+            foreach ($products as $product) {
+                $this->insert('{{%products}}', $product);
+            }
         }
 
         /**
@@ -59,17 +92,17 @@
          */
         public function safeDown()
         {
-            echo "m220603_081904_create_catalog_tables cannot be reverted.\n";
+            /*echo "m220603_081904_create_catalog_tables cannot be reverted.\n";
 
-            return false;
+            return false;*/
 
-            /*$this->dropIndex('idx-parent_id', 'sections');
+            $this->dropIndex('idx-parent_id', 'sections');
             $this->dropForeignKey('groupId', 'products');
             $this->dropIndex('idx-group_id-rating', 'products');
             $this->dropIndex('idx-group_id-name', 'products');
 
             $this->dropTable('{{%sections}}');
-            $this->dropTable('{{%products}}');*/
+            $this->dropTable('{{%products}}');
         }
 
         /*
