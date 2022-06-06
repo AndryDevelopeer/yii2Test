@@ -25,7 +25,7 @@ CONSOLE
 
 WEB
 ------------
-      /web/index.php?r=catalog%2Fproducts 
+      /web/catalog/products 
  
 или воспользуйтесь меню на главной странице,
 раздел меню Products

@@ -18,6 +18,10 @@ Thumbs.db
 # upload dir
 /upload
 
+/docker
+
+edits.txt
+
 # composer itself is not needed
 composer.phar
 

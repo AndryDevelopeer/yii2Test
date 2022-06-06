@@ -1,38 +1,41 @@
 <?php
 
+namespace app\controllers;
 
-    namespace app\controllers;
+use app\helpers\DownloadHelper;
+use app\helpers\ProductHelper;
+use app\helpers\SpreadsheetHelper;
+use app\models\SectionForm;
+use yii\web\Controller;
+use yii\helpers\Html;
+use Yii;
 
-    use app\models\SectionForm;
-    use Yii;
-    use yii\web\Controller;
-    use yii\helpers\Html;
-
-    class CatalogController extends Controller
+class CatalogController extends Controller
+{
+    public function actionProducts()
     {
-        public function actionProducts()
-        {
-            $form = new SectionForm();
+        $form = new SectionForm();
 
-            if ($form->load(Yii::$app->request->post())) {
-                if ($form->validate()) {
-                    $id = Html::encode($form->id);
-                    $products = ProductController::getProductsByIdSection($id);
-                    $table = new SpreadsheetController();
-                    $filePath = $table->writeFile($products);
-                    if ($filePath)
-                        return Yii::$app->response->sendFile($filePath);
+        if ($form->load(Yii::$app->request->post())) {
+            if ($form->validate()) {
+                $id = Html::encode($form->id);
+                $product = new ProductHelper();
+                $table = new SpreadsheetHelper();
+                $filePath = (new DownloadHelper())->getFilePath();
+                $table->write($product->getProductsBySectionId($id), $filePath);
+                if ($table->error === '') {
+                    return Yii::$app->response->sendFile($filePath);
                 } else {
-                    Yii::$app->session->setFlash('success', 'не верно указан ID раздела');
+                    Yii::$app->session->setFlash('error', $table->error);
                 }
             } else {
-                $form->id = 0;
+                Yii::$app->session->setFlash('success', 'не верно указан ID раздела');
             }
-
-            return $this->render('products', [
-                'form' => $form,
-            ]);
+        } else {
+            $form->id = 0;
         }
-
-
+        return $this->render('products', [
+            'form' => $form,
+        ]);
     }
+}

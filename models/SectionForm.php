@@ -19,7 +19,7 @@
         public function rules()
         {
             return [
-                ['id', 'required', 'message' => 'Пожалуйсто, введите ID раздела.'],
+                ['id', 'required', 'message' => 'Пожалуйста, введите ID раздела.'],
                 ['id', 'integer', 'max' => 999999,],
             ];
         }
