@@ -116,7 +116,6 @@ class m220603_081904_create_catalog_tables extends Migration
     public function down()
     {
         echo "m220603_081904_create_catalog_tables cannot be reverted.\n";
-
         return false;
     }
     */

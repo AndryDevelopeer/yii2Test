@@ -10,8 +10,8 @@ services:
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
-      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-      - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+      - ./docker/php/:/usr/local/etc/php/conf.d/
+      - ./docker/apache/:/etc/apache2/sites-available/
     environment:
       - PHP_ENABLE_XDEBUG=1
       - PHP_IDE_CONFIG=serverName=MyTestServer
@@ -25,10 +25,10 @@ services:
     image: mysql:5.7
     restart: always
     environment:
-      - MYSQL_DATABASE=yii2basic
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=my_database_name
+      - MYSQL_USER=my_user_name
+      - MYSQL_PASSWORD=my_user_password
+      - MYSQL_ROOT_PASSWORD=my_root_password
     ports:
       - '3306:3306'
     expose:

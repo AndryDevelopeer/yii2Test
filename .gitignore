@@ -18,7 +18,8 @@ Thumbs.db
 # upload dir
 /upload
 
-/docker
+/docker/mysql
+/docker/php
 
 edits.txt
 
